@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nnp-km-backend-local-llm
+  labels:
+    app: nnp-km-backend-local-llm
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: nnp-km-backend-local-llm
+  template:
+    metadata:
+      labels:
+        app: nnp-km-backend-local-llm
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+
+      containers:
+      - name: api
+        image: <CONTAINER_IMAGE>
+        imagePullPolicy: Always
+
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+
+        # ---- Configuration ----
+        # Every application variable is injected from the ConfigMap as a whole.
+        # Add / change / remove a key in k8s-manifest/configmap.yaml and it flows
+        # through here automatically - this file never needs editing for config.
+        envFrom:
+        - configMapRef:
+            name: nnp-km-backend-local-llm-config
+
+        # resources:
+        #   requests:
+        #     cpu: "300m"
+        #     memory: "500Mi"
+        #   limits:
+        #     cpu: "550m"
+        #     memory: "1000Mi"
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL
+
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+
+      volumes:
+      - name: tmp
+        emptyDir: {}
+
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
