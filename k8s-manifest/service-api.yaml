@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nnp-km-backend-local-llm
+  labels:
+    app: nnp-km-backend-local-llm
+spec:
+  type: NodePort
+  selector:
+    app: nnp-km-backend-local-llm
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  sessionAffinity: None
+

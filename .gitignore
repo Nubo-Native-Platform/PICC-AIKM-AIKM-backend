@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# Local overrides
+.env
+*.local
+
+# Logs
+logs/
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+.external-db-schema/
+
+# Local assistant and migration notes
+CLAUDE.md
+LOCAL_LLM_MIGRATION.md

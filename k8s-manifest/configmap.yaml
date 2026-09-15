@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nnp-km-backend-local-llm-config
+data:
+  # ---- API ----
+  CONFIG_SERVER_URL: "<CONFIG_SERVER_URL>"
+  CONFIG_APP_NAME: "<CONFIG_APP_NAME>"
+  CONFIG_PROFILE: "<CONFIG_PROFILE>"
+  CONFIG_TAG: "<CONFIG_TAG>"
+  CONFIG_SERVER_TIMEOUT: "5"
+  CONFIG_SERVER_REQUIRED: "true"
+  ALLOW_LOCAL_CONFIG_OVERRIDES: "false"

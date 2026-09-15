@@ -1,0 +1,35 @@
+# ---- Build stage ----
+    FROM python:3.13-slim AS builder
+
+    WORKDIR /app
+    
+    # Build deps only needed here, not in final image
+    RUN apt-get update && apt-get install -y \
+        build-essential \
+        git \
+        && rm -rf /var/lib/apt/lists/*
+    
+    COPY requirements-api.txt .
+    RUN pip install --no-cache-dir --prefix=/install -r requirements-api.txt
+    
+    # ---- Runtime stage ----
+    FROM python:3.13-slim
+    
+    WORKDIR /app
+    
+    # Copy only the installed packages, not build tools
+    COPY --from=builder /install /usr/local
+    
+    # Copy application code
+    COPY . .
+    
+    RUN mkdir -p logs
+    
+    EXPOSE 8000
+    ENV PYTHONUNBUFFERED=1
+    # Container-local paths/identity. NOT application config - all of that
+    # comes from the ConfigMap via envFrom in k8s-manifest/deployment-api.yaml.
+    ENV HF_HOME=/tmp/huggingface
+    ENV USER=appuser
+    
+    CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

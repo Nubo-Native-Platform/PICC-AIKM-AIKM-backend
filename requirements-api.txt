@@ -1,0 +1,61 @@
+# API Framework
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-multipart
+
+# PostgreSQL driver (CoreComp / nnp-rag schema)
+psycopg2-binary
+
+# ClickHouse driver for SigNoz / ClickHouse SQL execution
+clickhouse-connect
+
+# Async HTTP client for outbound calls to the provision / ingestion services
+httpx
+requests
+
+# Milvus vector database client — direct collection management
+# 2.5.x is the minimum that supports grpcio>=1.66; API-compatible with Milvus 2.3.x servers.
+pymilvus==2.5.18
+
+# Env file loading
+python-dotenv
+
+# OpenAI embeddings + LangChain text splitting
+openai
+langchain-openai
+langchain-huggingface
+sentence-transformers
+langchain-text-splitters
+tiktoken
+
+# Anthropic Claude — SQL generation (retained for fallback; active backend is Ollama)
+anthropic
+ollama
+
+# Vanna NL->SQL
+vanna[pgvector,openai]==0.7.9
+psycopg[binary]>=3.1.0
+langchain-postgres>=0.0.12
+
+# Document content extraction
+pypdf
+PyMuPDF
+python-docx
+beautifulsoup4
+lxml
+minio
+
+# Structural code parsing for optional tree-sitter Git reader
+tree-sitter
+tree-sitter-python
+tree-sitter-javascript
+tree-sitter-typescript
+tree-sitter-java
+
+# Redmine ingestion
+python-redmine
+
+
+# Build: 2026-06-06
